@@ -1,6 +1,5 @@
 from os import pipe
 from flask import Flask, render_template, request
-import sklearn
 import pandas as pd
 import pickle
 
@@ -34,13 +33,13 @@ def predict():
 
     input = pd.DataFrame([[ccscore, country, gender, age, tenure, balance, product, cccard, net_banking, income]],
                     columns=['CreditScore', 'Geography', 'Gender', 'Age', 'Tenure', 'Balance', 'NumOfProducts', 'HasCrCard', 'IsActiveMember', 'EstimatedSalary'])
- 
+    print(input)
     prediction = pipe.predict(input)[0]
 
     if prediction>=1:
-       return "You are eligible for loan."
+        return "You are eligible for loan."
     else:
-       return "Sorry! Please try next time."
+        return "Sorry! Please try next time."
 
 if __name__ == '__main__':
-    app.run(debug=True, port=8050)
+    app.run(debug=True)

@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+
+    <title>Bank Loan Predictor</title>
+  </head>
+  <body class='bg-dark'>
+    <div class='container' col>
+      <div class='row'>
+        <div class="card", style="width: 100%; height: 100%; margin-top: 20px" >
+          <div class="card-header" style="text-align: center">
+            <h1>Welcome to Bank Loan Predictor</h1>
+          </div>
+          <div class="card-body">
+            <form method="POST" accept-charset="utf-8">
+              <div class="row", style="row-gap: 10px">
+                <div class="col-md-6 form-group" style="text-align: center">
+                  <label><b>Enter your credit score</b></label>
+                  <input type="text"  class="form-control" id="ccscore" name="ccscore" placeholder="Enter your credit score">                  
+                </div>
+                <div class="col-md-6 form-group" style="text-align: center">
+                  <label><b>Select your country</b></label>
+                  <select class="selectpicker form-control"  name="country" id="country" required=1>
+                    {% for country in country %}
+                      <option value="{{country}}">{{country}}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+                <div class="col-md-6 form-group" style="text-align: center">
+                  <label><b>Select your gender</b></label>
+                  <select class="selectpicker form-control"  name="gender" id="gender" required=1>
+                    {% for gender in gender %}
+                    <option value="{{gender}}">{{gender}}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+                <div class="col-md-6 form-group" style="text-align: center">
+                  <label><b>Enter your age</b></label>
+                  <input type="text" class="form-control" id="age" name="age" placeholder="Enter your age between 1 and 100" min="1" max="100">                  
+                </div>
+                <div class="col-md-6 form-group" style="text-align: center">
+                  <label><b>Enter the tenure</b></label>
+                  <input type="text" class="form-control" id="tenure" name="tenure" placeholder="Enter your tenure between 1 and 10" min="1" max="10">                  
+                </div>
+                <div class="col-md-6 form-group" style="text-align: center">
+                  <label><b>How much do you have balance in your account?</b></label>
+                  <input type="text" class="form-control" id="balance" name="balance" placeholder="Enter your balance between 0 and 500000" min="0" max="500000">                  
+                </div>
+                <div class="col-md-6 form-group" style="text-align: center">
+                  <label><b>How much product are you using?</b></label>
+                  <input type="text" class="form-control" id="product" name="product" placeholder="How much product are you using?">                  
+                </div>
+                <div class="col-md-6 form-group" style="text-align: center">
+                  <label><b>Do you have credit card</b></label>
+                  <select class="selectpicker form-control"  name="cccard" id="cccard" required=1>
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>                    
+                  </select>
+                </div>
+                <div class="col-md-6 form-group" style="text-align: center">
+                  <label><b>Do you use net-banking frequently?</b></label>
+                  <select class="selectpicker form-control"  name="net_banking" id="net_banking" required=1>
+                    <option value="0">No</option>
+                    <option value="1" >Yes</option>                    
+                  </select>
+                </div>
+                <div class="col-md-6 form-group" style="text-align: center">
+                  <label><b>What is your yearly income?</b></label>
+                  <input type="text" class="form-control" id="income" name="income" placeholder="Enter your yearly income">                                                 
+                </div>
+                <div class="col-md-12 form-group" style="margin-top: 15px">
+                  <button class="btn btn-primary form-control" onclick="send_data()">Predictor</button>
+                </div>                    
+              </div>
+            </form>
+            <br>
+            <div class="col-md-12" style="text-align: center">
+              <h3><span id="prediction"></span></h3>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      function form_handler(event) {
+        event.preventDefault(); //Dont submit the form normally
+        }
+      function send_data()
+      {
+        document.querySelector('form').addEventListener("submit", form_handler)
+
+        var fd = new FormData(document.querySelector('form'))
+
+        var xhr= new XMLHttpRequest();
+
+        xhr.open('POST', '/predict', true);
+        document.getElementById("prediction").innerHTML = "Wait for results!...";
+        xhr.onreadystatechange = function(){
+          if (xhr.readyState == XMLHttpRequest.DONE){
+              document.getElementById("prediction").innerHTML = "Results: "+xhr.responseText;
+                      
+          }
+        }
+
+        xhr.onload = function(){};
+        xhr.send(fd);
+      }
+    </script>
+    
+    
+    <!-- Option 2: Separate Popper and Bootstrap JS -->
+    <!--
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.min.js" integrity="sha384-Atwg2Pkwv9vp0ygtn1JAojH0nYbwNJLPhwyoVbhoPwBhjQPR5VtM2+xf0Uwh9KtT" crossorigin="anonymous"></script>
+    -->
+  </body>
+</html>
