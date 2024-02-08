@@ -186,7 +186,7 @@ def on_button_click(n_clicks, ccscore, gender, balance, country, age, product,
                            "HasCrCard", "IsActiveMember", "Tenure", "EstimatedSalary"])
         record = record[['CreditScore', 'Geography', 'Gender', 'Age', 'Tenure', 'Balance', 'NumOfProducts',
                             'HasCrCard', 'IsActiveMember', 'EstimatedSalary']]
-        print(record)
+        # print(record)
         # print(record.info())    
         prediction = pipe.predict(record)[0]
         if prediction>=1:
