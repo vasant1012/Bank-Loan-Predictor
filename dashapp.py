@@ -1,14 +1,13 @@
 import pandas as pd
 from dash import Dash, dcc, html, Input, Output, State
 import dash_bootstrap_components as dbc
-import os
 import pickle
 import warnings
 warnings.filterwarnings('ignore')
 
 # Application and it's stylesheet
 app = Dash(__name__, external_stylesheets=[dbc.themes.FLATLY])
-pipe = pickle.load(open("Bank_Loan_model.pkl","rb"))
+model = pickle.load(open("Bank_Loan_model.pkl","rb")) 
 
 ccscore = dbc.FormFloating([
     dbc.Input(type="number",
@@ -93,10 +92,10 @@ cccard_dropdown = html.Div([
     dcc.Dropdown(id="cccard",
                  options=[{
                      "label": "Yes",
-                     "value": "Yes"
+                     "value": 1
                  }, {
                      "label": "No",
-                     "value": "No"
+                     "value": 0
                  }])
 ],
     className="mb-3")
@@ -106,10 +105,10 @@ net_banking_dropdown = html.Div([
     dcc.Dropdown(id="netbanking",
                  options=[{
                      "label": "Yes",
-                     "value": "Yes"
+                     "value": 1
                  }, {
                      "label": "No",
-                     "value": "No"
+                     "value": 0
                  }])
 ],
     className="mb-3")
@@ -185,17 +184,15 @@ def on_button_click(n_clicks, ccscore, gender, balance, country, age, product,
         ]], columns = ["CreditScore", "Gender", "Balance", "Geography", "Age", "NumOfProducts",
                            "HasCrCard", "IsActiveMember", "Tenure", "EstimatedSalary"])
         record = record[['CreditScore', 'Geography', 'Gender', 'Age', 'Tenure', 'Balance', 'NumOfProducts',
-                            'HasCrCard', 'IsActiveMember', 'EstimatedSalary']]
-        # print(record)
-        # print(record.info())    
-        prediction = pipe.predict(record)[0]
-        if prediction>=1:
+                            'HasCrCard', 'IsActiveMember', 'EstimatedSalary']]   
+        prediction = model.predict(record)
+        if prediction[0]>=1:
             output = html.H3(
-            ["You are eligible for loan."])
+            ["You are eligible for loan."], style={'textAlign': 'center'})
         else:
             output = html.H3(
-            [ "Sorry! Please try next time."])
-        # return dbc.Table.from_dataframe(record, striped=True, bordered=True, hover=True)
-
+            [ "Sorry! Please try next time."], style={'textAlign': 'center'})
+        return output
+    
 if __name__ == '__main__':
     app.run_server(debug=False, use_reloader=False, port=7480)
